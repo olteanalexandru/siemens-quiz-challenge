@@ -1,6 +1,6 @@
 let question_count = 0;
 let userSelections = new Array(0);
-let totalScoresHistory = new Array(questions.length).fill(0); // Initialize with 0 scores
+let totalScoresHistory = new Array(questions.length).fill(0);
 let timer;
 let time = 0;
 let timeouTime = 0;
@@ -16,17 +16,14 @@ function timeout() {
         timeouTime++;
         passedTime++;
 
-        // Display the remaining time
         let remainingTime = timeOut - timeouTime;
         let minutes = Math.floor(remainingTime / 60).toString().padStart(2, '0');
         let seconds = (remainingTime % 60).toString().padStart(2, '0');
         document.getElementById("timeOutTimer").innerHTML = `Time remaining: ${minutes}:${seconds}`;
 
-        // Check if 10 minutes have passed
         if (timeouTime >= timeOut) {
             final();
         } else {
-            // Continue the game
             timeout();
         }
     }, 1000);
@@ -40,11 +37,11 @@ function next() {
     if (activeOption) {
         saveUserAnswer(activeOption);
     } else {
-  saveUserAnswer(null, true);
+        saveUserAnswer(null, true);
 
     }
 
-  if (question_count == questions.length - 1) {
+    if (question_count == questions.length - 1) {
         sessionStorage.setItem("time", time);
         clearInterval(mytime);
         final();
@@ -58,11 +55,10 @@ function next() {
 function previous() {
     if (question_count > 0) {
         question_count--;
-        restorePreviousState(); // Restore the previous state of total scores
+        restorePreviousState();
         show(question_count);
         startTimer();
     } else {
-        // Do nothing if already at the first question
         return;
     }
 }
@@ -101,7 +97,6 @@ function show(count) {
     </ul>
     `;
 
-    // Remove highlighting when displaying options
     let option = document.querySelectorAll("li.option");
     option.forEach((item) => {
         item.classList.remove("active");
@@ -115,18 +110,18 @@ function show(count) {
     startTimer();
 }
 
-function saveUserAnswer(selectedOption , timeout) {
-    if (!timeout){
+function saveUserAnswer(selectedOption, timeout) {
+    if (!timeout) {
 
-    let index = [...selectedOption.parentElement.children].indexOf(selectedOption);
-    userSelections[question_count] = index;
+        let index = [...selectedOption.parentElement.children].indexOf(selectedOption);
+        userSelections[question_count] = index;
 
-    let rightAnswerIndex = questions[question_count].options.indexOf(questions[question_count].answer);
-    totalScoresHistory[question_count] = index === rightAnswerIndex ? 1 : 0;
+        let rightAnswerIndex = questions[question_count].options.indexOf(questions[question_count].answer);
+        totalScoresHistory[question_count] = index === rightAnswerIndex ? 1 : 0;
 
     } else {
 
-        userSelections[question_count] =  -1;
+        userSelections[question_count] = -1;
         totalScoresHistory[question_count] = 0;
 
 
@@ -136,7 +131,7 @@ function saveUserAnswer(selectedOption , timeout) {
     updateScoreDisplay();
 }
 
-console.log(totalScoresHistory , userSelections);
+console.log(totalScoresHistory, userSelections);
 
 let sessionPoints;
 function updateScoreDisplay() {
@@ -176,11 +171,8 @@ function myTimer() {
 function final() {
 
 
-
-
-    // Store the totalScoresHistory and timeTaken in session storage
     const dataToStore = {
-        totalScoresHistory : sessionPoints
+        totalScoresHistory: sessionPoints
     };
     sessionStorage.setItem("quizResults", JSON.stringify(dataToStore));
     location.href = "end.html";
@@ -193,7 +185,7 @@ function shuffle(array) {
 }
 
 function restorePreviousState() {
-    totalScoresHistory[question_count] = 0; // Reset the current question's total score
+    totalScoresHistory[question_count] = 0; 
 }
 
 shuffle(questions);
